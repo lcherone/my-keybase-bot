@@ -1,16 +1,18 @@
 {
-  "name": "keybase",
+  "name": "my-keybase-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "nodemon --watch ./api --exec \"node src/index.js\""
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "banterer": "^1.1.4",
     "keybase-bot": "^3.6.1",
-    "thesaurize": "^1.0.11"
+    "thesaurize": "^1.0.11",
+    "nodemon": "^1.18.9"
   }
 }

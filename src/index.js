@@ -1,8 +1,18 @@
+const path = require('path')
 const util = require('util')
 const exec = util.promisify(require('child_process').exec)
-
 const bot = new(require('keybase-bot'))()
+const env = require('dotenv').config({
+  path: path.join(__dirname, '..', '.env')
+})
 
+if (env.error) {
+  throw env.error
+}
+
+/**
+ *
+ */
 async function main() {
   try {
     const username = process.env.KB_USERNAME
@@ -10,9 +20,16 @@ async function main() {
 
     await bot.init(username, paperkey)
 
+    /**
+     *
+     */
     const info = bot.myInfo()
+    // bot.wallet.balances().then(accounts => console.log(accounts))
     console.log(`Echo bot initialized with username ${info.username}.`)
 
+    /**
+     *
+     */
     await bot.chat.clearCommands().then(async () => {
       await bot.chat.advertiseCommands({
         advertisements: [{
@@ -42,6 +59,10 @@ async function main() {
       })
     })
 
+    /**
+     *
+     * @param {*} message
+     */
     const onMessage = async message => {
 
       //
@@ -123,7 +144,7 @@ async function main() {
         }
       }
 
-      // if bot user (cooler things)
+      // message from self
       if (info.username === message.sender.username) {
 
         // !file attach a file
@@ -421,11 +442,17 @@ async function main() {
           })
         }
       }
-
-      // bot.wallet.balances().then(accounts => console.log(accounts))
     }
 
+    /**
+     *
+     * @param {*} e
+     */
     const onError = e => console.error(e)
+
+    /**
+     *
+     */
     console.log(`Listening for messages...`)
     await bot.chat.watchAllChannelsForNewMessages(onMessage, onError)
   } catch (error) {
@@ -433,6 +460,9 @@ async function main() {
   }
 }
 
+/**
+ *
+ */
 async function shutDown() {
   await bot.deinit()
   process.exit()
